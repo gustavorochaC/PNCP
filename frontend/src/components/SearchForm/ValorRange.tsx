@@ -16,7 +16,7 @@ export function ValorRange({ valorMin, valorMax, onChangeMin, onChangeMax }: Val
         onChange={e => onChangeMin(e.target.value)}
         placeholder="Valor mín."
         min={0}
-        className="block w-full rounded-lg border border-gray-300 bg-white py-2.5 px-3 text-sm text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+        className="block w-full rounded-lg border border-input bg-background py-2.5 px-3 text-sm text-foreground placeholder:text-muted-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring"
       />
       <input
         type="number"
@@ -24,7 +24,7 @@ export function ValorRange({ valorMin, valorMax, onChangeMin, onChangeMax }: Val
         onChange={e => onChangeMax(e.target.value)}
         placeholder="Valor máx."
         min={0}
-        className="block w-full rounded-lg border border-gray-300 bg-white py-2.5 px-3 text-sm text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+        className="block w-full rounded-lg border border-input bg-background py-2.5 px-3 text-sm text-foreground placeholder:text-muted-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring"
       />
     </div>
   )

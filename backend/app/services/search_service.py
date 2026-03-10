@@ -72,6 +72,28 @@ def _normalize_pncp_item(item: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
+def _filter_by_keyword(items: list, query: str) -> list:
+    """Filtra resultados da API PNCP pelos termos da palavra-chave.
+    Retorna apenas itens onde ao menos uma palavra aparece nos campos principais."""
+    if not query or not query.strip():
+        return items
+    words = [w.lower() for w in query.split() if len(w) > 2]
+    if not words:
+        return items
+    result = []
+    for item in items:
+        text = " ".join([
+            str(item.get("objeto_compra") or item.get("objetoCompra") or ""),
+            str(item.get("nome_orgao") or (item.get("orgaoEntidade") or {}).get("razaoSocial") or ""),
+            str(item.get("nome_unidade_compradora") or ""),
+            str(item.get("informacao_complementar") or item.get("informacaoComplementar") or ""),
+            str(item.get("justificativa") or ""),
+        ]).lower()
+        if any(word in text for word in words):
+            result.append(item)
+    return result
+
+
 def _normalize_for_upsert(item: Dict[str, Any]) -> Dict[str, Any]:
     """Ensure payload matches what pncp_upsert_edital() SQL function expects.
 
@@ -176,6 +198,8 @@ class SearchService:
             logger.warning("PNCP API search failed: %s", results[1])
 
         pncp_items = _extract_pncp_results(pncp_api_response)
+        if q and pncp_items:
+            pncp_items = _filter_by_keyword(pncp_items, q)
         merged, _, new_from_pncp = _deduplicate(supabase_results, pncp_items)
 
         # Background upsert of new records (non-blocking)
@@ -186,12 +210,11 @@ class SearchService:
 
         sorted_items = _sort_results(merged)
 
-        # Determine total count
-        total_items = 0
-        if supabase_results:
-            total_items = int(supabase_results[0].get("total_count") or 0)
-        if not total_items:
-            total_items = int(pncp_api_response.get("totalRegistros") or len(merged))
+        # Determine total count — use PNCP's totalRegistros (true total across all pages)
+        pncp_total = int(pncp_api_response.get("totalRegistros") or 0)
+        supabase_total = int(supabase_results[0].get("total_count") or 0) if supabase_results else 0
+        # Both sources largely overlap (Supabase caches PNCP items), use max as best estimate
+        total_items = max(pncp_total, supabase_total, len(merged))
 
         # Normalize PNCP-only items before building response
         normalized: List[Dict[str, Any]] = []

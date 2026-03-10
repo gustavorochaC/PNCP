@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "concurrently --names \"BACK,FRONT\" --prefix-colors \"cyan,magenta\" \"npm run dev:backend\" \"npm run dev:frontend\"",
-    "dev:backend": "cd backend && .venv/Scripts/python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000",
+    "dev:backend": "node scripts/start-backend.js",
     "dev:frontend": "cd frontend && npm run dev"
   },
   "devDependencies": {

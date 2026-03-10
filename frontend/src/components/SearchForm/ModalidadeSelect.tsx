@@ -11,7 +11,7 @@ export function ModalidadeSelect({ value, onChange }: ModalidadeSelectProps) {
     <select
       value={value}
       onChange={e => onChange(e.target.value)}
-      className="block w-full rounded-lg border border-gray-300 bg-white py-2.5 px-3 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+      className="block w-full rounded-lg border border-input bg-background py-2.5 px-3 text-sm text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring"
     >
       <option value="">Todas as modalidades</option>
       {MODALIDADES.map(m => (

@@ -4,7 +4,7 @@ export function Spinner({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
   const sizes = { sm: 'h-4 w-4', md: 'h-6 w-6', lg: 'h-10 w-10' }
   return (
     <svg
-      className={`animate-spin text-blue-600 ${sizes[size]}`}
+      className={`animate-spin text-primary ${sizes[size]}`}
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"

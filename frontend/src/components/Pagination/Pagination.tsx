@@ -1,6 +1,6 @@
 import React from 'react'
 import type { Pagination as PaginationType } from '../../types/edital'
-import { Button } from '../ui/Button'
+import { Button } from '@/components/ui/button'
 
 interface PaginationProps {
   pagination: PaginationType
@@ -27,11 +27,11 @@ export function Pagination({ pagination, onPageChange }: PaginationProps) {
 
       {pages.map((p, i) =>
         p === '...' ? (
-          <span key={`ellipsis-${i}`} className="px-2 text-gray-400 text-sm select-none">…</span>
+          <span key={`ellipsis-${i}`} className="px-2 text-muted-foreground text-sm select-none">…</span>
         ) : (
           <Button
             key={p}
-            variant={p === page ? 'primary' : 'secondary'}
+            variant={p === page ? 'default' : 'secondary'}
             size="sm"
             onClick={() => onPageChange(p as number)}
             className="min-w-[36px]"
